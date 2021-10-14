@@ -5,6 +5,9 @@ let totalArray = []
 const productList = document.getElementById("productList")
 const shoppingCart = document.getElementById("shoppingCartList")
 const shoppingCartTitle =document.getElementById("shoppingCartTitle")
+const input = document.getElementById("input")
+const inputButton = document.getElementById("inputButton")
+const buttonReverse = document.getElementById("buttonReverse")
 
 function renderProduct(product) {
     const productElement = document.createElement("div")
@@ -14,20 +17,14 @@ function renderProduct(product) {
     const descriptionElement = document.createElement("p")
     const infoElement = document.createElement("p")
     const buttonElement = document.createElement("button")
-    
-
-    // const ratingElement = document.createElement("p")
-    // const stockElement = document.createElement("p")
 
     nameElement.innerText = product.name
     imgElement.src = product.images[0].src.small
     imgElement.alt = product.images[0].alt
     descriptionElement.innerText = product.description
-    infoElement.innerText = `Price: ${product.price}\n Rating: ${product.rating}\n Stock: ${product.stock} kr`
+    infoElement.innerText = `Price: ${product.price} kr\n Rating: ${product.rating}\n Stock: ${product.stock}`
     buttonElement.innerText = `Buy: ${product.name}`
-
-    // ratingElement.innerText = `Rating: ${product.rating}`
-    // stockElement.innerText = `Stock: ${product.stock}`
+    
 
     productElement.appendChild(nameElement)
     productElement.appendChild(imgElement)
@@ -35,13 +32,10 @@ function renderProduct(product) {
     productElement.appendChild(infoElement)
     productElement.appendChild(buttonElement)
 
-    // productElement.appendChild(ratingElement)
-    // productElement.appendChild(stockElement)
-
     productList.appendChild(productElement)
     
     function renderShoppingCartList() {
-        shoppingCartTitle.innerText = "Varukorg"
+        shoppingCartTitle.innerText = "Shopping cart"
         const shoppingCartElement = document.createElement("p")
         shoppingCartElement.innerText = `${product.name} - ${product.price} kr`
         shoppingCart.appendChild(shoppingCartElement)
@@ -55,6 +49,12 @@ function renderProduct(product) {
 
     imgElement.addEventListener("click", function() {
         renderShoppingCartList()
+    })
+
+    inputButton.addEventListener("click", function() {
+        if(input.value > product.rating) {
+            productElement.innerText = ""
+        }
     })
 }
 
@@ -78,5 +78,3 @@ fetch(url)
     renderProductsList(data)
     console.log(data)
 })
-
-
