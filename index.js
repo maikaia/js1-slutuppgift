@@ -1,16 +1,17 @@
 const url = "https://mock-data-api.firebaseio.com/webb21/products.json"
 
 let totalArray = []
+let productData;
 
 const productList = document.getElementById("productList")
 const shoppingCart = document.getElementById("shoppingCartList")
 const shoppingCartTitle =document.getElementById("shoppingCartTitle")
 const input = document.getElementById("input")
 const inputButton = document.getElementById("inputButton")
-const buttonReverse = document.getElementById("buttonReverse")
 
 function renderProduct(product) {
     const productElement = document.createElement("div")
+    productElement.id = product.id
 
     const nameElement = document.createElement("h1")
     const imgElement = document.createElement("img")
@@ -34,26 +35,32 @@ function renderProduct(product) {
 
     productList.appendChild(productElement)
     
-    function renderShoppingCartList() {
-        shoppingCartTitle.innerText = "Shopping cart"
-        const shoppingCartElement = document.createElement("p")
-        shoppingCartElement.innerText = `${product.name} - ${product.price} kr`
-        shoppingCart.appendChild(shoppingCartElement)
-        totalArray.push(product.price)
-        document.getElementById("totalElement").innerText = `Total: ${sumOfArray()} kr`
-    }
-
     buttonElement.addEventListener("click", function() {
-        renderShoppingCartList()
-      })
-
-    imgElement.addEventListener("click", function() {
-        renderShoppingCartList()
+        renderShoppingCartList( product )
     })
 
-    inputButton.addEventListener("click", function() {
-        if(input.value > product.rating) {
-            productElement.innerText = ""
+    imgElement.addEventListener("click", function() {
+        renderShoppingCartList( product )
+    })
+}
+
+function renderShoppingCartList( product ) {
+    shoppingCartTitle.innerText = "Shopping cart"
+    const shoppingCartElement = document.createElement("p")
+    shoppingCartElement.innerText = `${product.name} - ${product.price} kr`
+    shoppingCart.appendChild(shoppingCartElement)
+    totalArray.push(product.price)
+    document.getElementById("totalElement").innerText = `Total: ${sumOfArray()} kr`
+}
+
+inputButton.addEventListener("click", function() {
+    filterProductlist( productData )
+})
+
+function filterProductlist( productList ) {
+    productList.forEach( product => {
+        if(input.value > product.rating || product.rating == undefined) {
+            document.getElementById(product.id).innerText = ""
         }
     })
 }
@@ -66,15 +73,15 @@ function sumOfArray() {
     return sum
 }
 
-function renderProductsList(productList) {
-    productList.forEach(product => {
-        renderProduct(product)
+function renderProductsList( productList ) {
+    productList.forEach( product => {
+        renderProduct( product )
     })
 }
 
 fetch(url)
 .then(res => res.json())
 .then(data => {
-    renderProductsList(data)
-    console.log(data)
+    productData = data 
+    renderProductsList( productData )
 })
